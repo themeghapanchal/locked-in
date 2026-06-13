@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>Locked In</title>
+
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <meta name="theme-color" content="#6366f1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Locked In" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-title" id="header-title">Today</div>
+      <div class="topbar-date" id="header-date"></div>
+    </header>
+
+    <main class="content">
+      <!-- TODAY VIEW -->
+      <section id="view-today" class="view active">
+        <div class="streak-card">
+          <div class="streak-number" id="today-streak-number">0</div>
+          <div class="streak-label">day streak 🔥</div>
+        </div>
+
+        <div id="today-tasks" class="today-tasks"></div>
+      </section>
+
+      <!-- GOALS VIEW -->
+      <section id="view-goals" class="view">
+        <div class="empty-state goals-intro">
+          These are the big things you're working toward. Break each one into small steps —
+          the Today tab will automatically pick from these for you.
+        </div>
+
+        <form id="goal-form" class="add-form">
+          <input id="goal-input" type="text" placeholder="New goal, e.g. Land a job..." autocomplete="off" />
+          <input id="goal-color" type="color" value="#6366f1" />
+          <button type="submit" class="btn-add">+</button>
+        </form>
+
+        <div id="goal-list" class="goal-list"></div>
+      </section>
+
+      <!-- HABITS VIEW -->
+      <section id="view-habits" class="view">
+        <form id="habit-form" class="add-form">
+          <input id="habit-input" type="text" placeholder="Add a habit..." autocomplete="off" />
+          <button type="submit" class="btn-add">+</button>
+        </form>
+        <div id="habit-list" class="habit-list"></div>
+      </section>
+
+      <!-- PROGRESS VIEW -->
+      <section id="view-progress" class="view">
+        <div class="streak-card">
+          <div class="streak-number" id="streak-number">0</div>
+          <div class="streak-label">day streak 🔥</div>
+        </div>
+
+        <div class="week-strip" id="week-strip"></div>
+
+        <div class="summary-card" id="weekly-summary"></div>
+
+        <div class="checkin-summary" id="checkin-summary"></div>
+
+        <label class="field-label">How did today feel?</label>
+        <div id="mood-picker" class="mood-picker">
+          <button type="button" class="mood-btn" data-mood="1">😩</button>
+          <button type="button" class="mood-btn" data-mood="2">😕</button>
+          <button type="button" class="mood-btn" data-mood="3">😐</button>
+          <button type="button" class="mood-btn" data-mood="4">🙂</button>
+          <button type="button" class="mood-btn" data-mood="5">🤩</button>
+        </div>
+
+        <label class="field-label" for="checkin-wins">What went well?</label>
+        <textarea id="checkin-wins" rows="2" placeholder="Wins, big or small..."></textarea>
+
+        <label class="field-label" for="checkin-challenges">What was hard?</label>
+        <textarea id="checkin-challenges" rows="2" placeholder="Challenges or blockers..."></textarea>
+
+        <label class="field-label" for="checkin-tomorrow">Top priority for tomorrow</label>
+        <textarea id="checkin-tomorrow" rows="2" placeholder="One thing to focus on..."></textarea>
+
+        <button id="checkin-save" class="btn-primary">Save check-in</button>
+        <div id="checkin-saved-msg" class="saved-msg"></div>
+      </section>
+    </main>
+
+    <nav class="tabbar">
+      <button class="tab active" data-view="today">
+        <span class="tab-icon">🔭</span><span class="tab-label">Today</span>
+      </button>
+      <button class="tab" data-view="goals">
+        <span class="tab-icon">🏆</span><span class="tab-label">Goals</span>
+      </button>
+      <button class="tab" data-view="habits">
+        <span class="tab-icon">🔥</span><span class="tab-label">Habits</span>
+      </button>
+      <button class="tab" data-view="progress">
+        <span class="tab-icon">📊</span><span class="tab-label">Progress</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
