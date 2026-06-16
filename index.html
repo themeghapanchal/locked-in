@@ -18,33 +18,17 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <button class="hamburger" id="hamburger-btn" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="topbar-title" id="header-title">Today</div>
+      <div class="topbar-title" id="header-title">Locked In</div>
       <div class="topbar-date" id="header-date"></div>
     </header>
 
-    <!-- Slide-in nav drawer -->
-    <div class="nav-overlay" id="nav-overlay"></div>
-    <nav class="nav-drawer" id="nav-drawer">
-      <div class="nav-drawer-header">Menu</div>
-      <button class="nav-item active" data-view="today">
-        <span class="nav-icon">🔭</span> Today
-      </button>
-      <button class="nav-item" data-view="goals">
-        <span class="nav-icon">🏆</span> Goals
-      </button>
-      <button class="nav-item" data-view="habits">
-        <span class="nav-icon">🔥</span> Habits
-      </button>
-      <button class="nav-item" data-view="todos">
-        <span class="nav-icon">📝</span> To-do
-      </button>
-      <button class="nav-item" data-view="progress">
-        <span class="nav-icon">📊</span> Stats
-      </button>
-    </nav>
+    <div class="nav-bar">
+      <button type="button" class="nav-pill active" data-view="today">🔭 Today</button>
+      <button type="button" class="nav-pill" data-view="goals">🏆 Goals</button>
+      <button type="button" class="nav-pill" data-view="habits">🔥 Habits</button>
+      <button type="button" class="nav-pill" data-view="todos">📝 To-do</button>
+      <button type="button" class="nav-pill" data-view="progress">📊 Stats</button>
+    </div>
 
     <main class="content">
       <!-- TODAY VIEW -->

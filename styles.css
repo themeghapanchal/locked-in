@@ -37,101 +37,50 @@ html, body {
 .topbar {
   padding: max(16px, env(safe-area-inset-top)) 20px 12px;
   display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+  align-items: baseline;
   flex-shrink: 0;
 }
 .topbar-title {
   font-size: 22px;
   font-weight: 700;
-  flex: 1;
 }
 .topbar-date {
   font-size: 13px;
   color: var(--text-dim);
 }
 
-/* Hamburger button */
-.hamburger {
-  background: none;
-  border: none;
-  cursor: pointer;
+/* Nav pill bar */
+.nav-bar {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 4px;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 16px 12px;
   flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 2px;
-}
-
-/* Nav overlay */
-.nav-overlay {
+.nav-bar::-webkit-scrollbar {
   display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 100;
 }
-.nav-overlay.open {
-  display: block;
-}
-
-/* Nav drawer */
-.nav-drawer {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 72vw;
-  max-width: 280px;
+.nav-pill {
+  flex-shrink: 0;
   background: var(--surface);
-  z-index: 101;
-  display: flex;
-  flex-direction: column;
-  padding: max(24px, env(safe-area-inset-top)) 0 24px;
-  transform: translateX(-100%);
-  transition: transform 0.25s ease;
-}
-.nav-drawer.open {
-  transform: translateX(0);
-}
-.nav-drawer-header {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  border: 1px solid var(--border);
   color: var(--text-dim);
-  padding: 0 20px 16px;
-}
-.nav-item {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 17px;
-  font-weight: 500;
-  text-align: left;
-  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 999px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  border-radius: 0;
+  white-space: nowrap;
+  min-height: 44px;
 }
-.nav-item.active {
-  color: var(--accent-2);
-  background: var(--surface-2);
-}
-.nav-icon {
-  font-size: 20px;
-  width: 28px;
-  text-align: center;
+.nav-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
 }
 
 /* Content */
