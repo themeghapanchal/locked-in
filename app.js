@@ -120,12 +120,16 @@ function setView(view) {
   if (view === 'todos') renderTodos();
 }
 
-document.getElementById('hamburger-btn').addEventListener('click', () => {
-  document.getElementById('nav-drawer').classList.toggle('open');
-  document.getElementById('nav-overlay').classList.toggle('open');
-});
+const hamburgerBtn = document.getElementById('hamburger-btn');
+if (hamburgerBtn) {
+  hamburgerBtn.addEventListener('click', () => {
+    document.getElementById('nav-drawer').classList.toggle('open');
+    document.getElementById('nav-overlay').classList.toggle('open');
+  });
+}
 
-document.getElementById('nav-overlay').addEventListener('click', closeDrawer);
+const navOverlay = document.getElementById('nav-overlay');
+if (navOverlay) navOverlay.addEventListener('click', closeDrawer);
 
 document.querySelectorAll('.nav-item').forEach((btn) => {
   btn.addEventListener('click', () => setView(btn.dataset.view));
