@@ -250,6 +250,8 @@ function renderToday() {
 }
 
 /* ---------------- Goals view ---------------- */
+const expandedGoals = new Set();
+
 function countFocusDays(goalId) {
   return Object.values(data.dailyFocus).filter((id) => id === goalId).length;
 }
@@ -267,12 +269,18 @@ function renderGoals() {
   }
 
   data.goals.forEach((goal) => {
+    const subtasks = goal.subtasks || [];
+    const subtasksDone = subtasks.filter((s) => s.completed).length;
+    const isOpen = expandedGoals.has(goal.id);
+
     const card = document.createElement('div');
     card.className = 'goal-card';
     card.style.borderLeftColor = goal.color;
 
+    // --- Header row (always visible) ---
     const header = document.createElement('div');
     header.className = 'goal-header';
+    header.style.cursor = 'pointer';
 
     const dot = document.createElement('span');
     dot.className = 'goal-dot';
@@ -282,21 +290,34 @@ function renderGoals() {
     name.className = 'goal-name';
     name.textContent = goal.name;
 
+    const meta = document.createElement('div');
+    meta.className = 'goal-meta';
+    if (subtasks.length > 0) {
+      meta.textContent = subtasksDone === subtasks.length
+        ? '🎉'
+        : `${subtasksDone}/${subtasks.length}`;
+    }
+
+    const chevron = document.createElement('span');
+    chevron.className = 'goal-chevron';
+    chevron.textContent = isOpen ? '▾' : '▸';
+
     const del = document.createElement('button');
     del.className = 'goal-delete';
     del.textContent = '✕';
-    del.title = 'Delete goal';
-    del.addEventListener('click', () => {
+    del.addEventListener('click', (e) => {
+      e.stopPropagation();
       data.goals = data.goals.filter((g) => g.id !== goal.id);
       save();
       renderGoals();
     });
 
-    header.append(dot, name, del);
+    header.append(dot, name, meta, chevron, del);
     card.appendChild(header);
 
-    const subtasks = goal.subtasks || [];
-    const subtasksDone = subtasks.filter((s) => s.completed).length;
+    // --- Collapsible body ---
+    const body = document.createElement('div');
+    body.className = 'goal-body' + (isOpen ? ' open' : '');
 
     if (subtasks.length > 0) {
       const bar = document.createElement('div');
@@ -305,26 +326,13 @@ function renderGoals() {
       fill.className = 'progress-fill';
       fill.style.width = `${(subtasksDone / subtasks.length) * 100}%`;
       bar.appendChild(fill);
-      card.appendChild(bar);
-
-      const progressText = document.createElement('div');
-      progressText.className = 'goal-progress-text';
-      if (subtasksDone === subtasks.length) {
-        progressText.innerHTML = '';
-        const badge = document.createElement('span');
-        badge.className = 'goal-complete-badge';
-        badge.textContent = '🎉 Goal complete!';
-        progressText.appendChild(badge);
-      } else {
-        progressText.textContent = `${subtasksDone} / ${subtasks.length} steps complete`;
-      }
-      card.appendChild(progressText);
+      body.appendChild(bar);
     }
 
     const subtaskList = document.createElement('div');
     subtaskList.className = 'subtask-list';
     subtasks.forEach((sub) => subtaskList.appendChild(renderSubtaskItem(goal, sub)));
-    card.appendChild(subtaskList);
+    body.appendChild(subtaskList);
 
     const form = document.createElement('form');
     form.className = 'add-form subtask-form';
@@ -343,18 +351,19 @@ function renderGoals() {
       if (!text) return;
       goal.subtasks = goal.subtasks || [];
       goal.subtasks.push({ id: uid(), text, completed: false, completedAt: null });
+      expandedGoals.add(goal.id);
       save();
       renderGoals();
     });
-    card.appendChild(form);
+    body.appendChild(form);
 
-    const focusDays = countFocusDays(goal.id);
-    if (focusDays > 0) {
-      const focusLine = document.createElement('div');
-      focusLine.className = 'goal-focus-count';
-      focusLine.textContent = `📌 Focused on ${focusDays} day${focusDays === 1 ? '' : 's'} so far`;
-      card.appendChild(focusLine);
-    }
+    card.appendChild(body);
+
+    header.addEventListener('click', () => {
+      if (expandedGoals.has(goal.id)) expandedGoals.delete(goal.id);
+      else expandedGoals.add(goal.id);
+      renderGoals();
+    });
 
     listEl.appendChild(card);
   });
