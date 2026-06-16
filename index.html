@@ -58,6 +58,15 @@
         <div id="habit-list" class="habit-list"></div>
       </section>
 
+      <!-- TODOS VIEW -->
+      <section id="view-todos" class="view">
+        <form id="todo-form" class="add-form">
+          <input id="todo-input" type="text" placeholder="Quick reminder..." autocomplete="off" />
+          <button type="submit" class="btn-add">+</button>
+        </form>
+        <div id="todo-list" class="todo-list"></div>
+      </section>
+
       <!-- PROGRESS VIEW -->
       <section id="view-progress" class="view">
         <div class="streak-card">
@@ -106,6 +115,9 @@
       </button>
       <button class="tab" data-view="progress">
         <span class="tab-icon">📊</span><span class="tab-label">Progress</span>
+      </button>
+      <button class="tab" data-view="todos">
+        <span class="tab-icon">📝</span><span class="tab-label">To-do</span>
       </button>
     </nav>
   </div>
