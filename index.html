@@ -18,9 +18,33 @@
 <body>
   <div class="app">
     <header class="topbar">
+      <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <div class="topbar-title" id="header-title">Today</div>
       <div class="topbar-date" id="header-date"></div>
     </header>
+
+    <!-- Slide-in nav drawer -->
+    <div class="nav-overlay" id="nav-overlay"></div>
+    <nav class="nav-drawer" id="nav-drawer">
+      <div class="nav-drawer-header">Menu</div>
+      <button class="nav-item active" data-view="today">
+        <span class="nav-icon">🔭</span> Today
+      </button>
+      <button class="nav-item" data-view="goals">
+        <span class="nav-icon">🏆</span> Goals
+      </button>
+      <button class="nav-item" data-view="habits">
+        <span class="nav-icon">🔥</span> Habits
+      </button>
+      <button class="nav-item" data-view="todos">
+        <span class="nav-icon">📝</span> To-do
+      </button>
+      <button class="nav-item" data-view="progress">
+        <span class="nav-icon">📊</span> Stats
+      </button>
+    </nav>
 
     <main class="content">
       <!-- TODAY VIEW -->
@@ -102,24 +126,6 @@
         <div id="checkin-saved-msg" class="saved-msg"></div>
       </section>
     </main>
-
-    <nav class="tabbar">
-      <button class="tab active" data-view="today">
-        <span class="tab-icon">🔭</span><span class="tab-label">Today</span>
-      </button>
-      <button class="tab" data-view="goals">
-        <span class="tab-icon">🏆</span><span class="tab-label">Goals</span>
-      </button>
-      <button class="tab" data-view="habits">
-        <span class="tab-icon">🔥</span><span class="tab-label">Habits</span>
-      </button>
-      <button class="tab" data-view="progress">
-        <span class="tab-icon">📊</span><span class="tab-label">Stats</span>
-      </button>
-      <button class="tab" data-view="todos">
-        <span class="tab-icon">📝</span><span class="tab-label">To-do</span>
-      </button>
-    </nav>
   </div>
 
   <script src="app.js"></script>

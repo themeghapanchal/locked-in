@@ -98,14 +98,20 @@ function renderHeader(view) {
   });
 }
 
-/* ---------------- Tab navigation ---------------- */
+/* ---------------- Navigation ---------------- */
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+}
+
 function setView(view) {
   document.querySelectorAll('.view').forEach((el) => el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach((el) => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach((el) => el.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
-  document.querySelector(`.tab[data-view="${view}"]`).classList.add('active');
+  document.querySelector(`.nav-item[data-view="${view}"]`).classList.add('active');
 
   renderHeader(view);
+  closeDrawer();
 
   if (view === 'today') renderToday();
   if (view === 'goals') renderGoals();
@@ -114,7 +120,14 @@ function setView(view) {
   if (view === 'todos') renderTodos();
 }
 
-document.querySelectorAll('.tab').forEach((btn) => {
+document.getElementById('hamburger-btn').addEventListener('click', () => {
+  document.getElementById('nav-drawer').classList.toggle('open');
+  document.getElementById('nav-overlay').classList.toggle('open');
+});
+
+document.getElementById('nav-overlay').addEventListener('click', closeDrawer);
+
+document.querySelectorAll('.nav-item').forEach((btn) => {
   btn.addEventListener('click', () => setView(btn.dataset.view));
 });
 
