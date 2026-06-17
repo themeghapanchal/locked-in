@@ -1,8 +1,3 @@
-window.onerror = function(msg, src, line, col, err) {
-  document.body.style.padding = '20px';
-  document.body.innerHTML = '<div style="color:#ff6b6b;font-family:monospace;font-size:14px;word-break:break-all;white-space:pre-wrap"><b>JS ERROR</b><br>' + msg + '<br>Line ' + line + ':' + col + '<br>' + (err ? err.stack : '') + '</div>';
-};
-
 const STORAGE_KEY = 'plannerData';
 
 const DEFAULT_GOALS = [
