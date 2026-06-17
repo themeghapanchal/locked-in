@@ -42,10 +42,14 @@ function loadData() {
       return {
         goals,
         dailyFocus,
-        dailyDone: parsed.dailyDone || [],
+        dailyDone: Array.isArray(parsed.dailyDone) ? parsed.dailyDone : [],
         habits: parsed.habits || [],
         checkins: parsed.checkins || {},
-        todos: parsed.todos || [],
+        todos: (parsed.todos || []).map((t) => ({
+          id: t.id,
+          text: t.text,
+          done: !!t.done,
+        })),
       };
     } catch (e) {
       console.error('Failed to load data', e);
@@ -171,10 +175,10 @@ function changeFocus() {
 
 function renderToday() {
   ensureTodayFocus();
-  document.getElementById(‘today-streak-number’).textContent = calcDayStreak();
+  document.getElementById('today-streak-number').textContent = calcDayStreak();
 
-  const container = document.getElementById(‘today-tasks’);
-  container.innerHTML = ‘’;
+  const container = document.getElementById('today-tasks');
+  container.innerHTML = '';
 
   const today = todayStr();
   const goalId = data.dailyFocus[today];
@@ -182,50 +186,60 @@ function renderToday() {
   const doneToday = data.dailyDone.includes(today);
 
   if (!goal) {
-    const empty = document.createElement(‘div’);
-    empty.className = ‘empty-state’;
-    empty.textContent = "Add some steps to your goals (Goals tab) and they’ll show up here.";
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'Add some steps to your goals (Goals tab) and they’ll show up here.';
     container.appendChild(empty);
     return;
   }
 
-  const banner = document.createElement(‘div’);
-  banner.className = ‘focus-banner’;
+  const banner = document.createElement('div');
+  banner.className = 'focus-banner';
   banner.style.borderLeftColor = goal.color;
   banner.textContent = `Today’s focus: ${goal.name}`;
   container.appendChild(banner);
 
   if (doneToday) {
-    const cel = document.createElement(‘div’);
-    cel.className = ‘celebration-card’;
-    const title = document.createElement(‘div’);
-    title.className = ‘celebration-title’;
-    title.textContent = "🎉 You’re done for today!";
-    const sub = document.createElement(‘div’);
-    sub.className = ‘celebration-sub’;
-    sub.textContent = "Nice work. Go enjoy your evening.";
+    const cel = document.createElement('div');
+    cel.className = 'celebration-card';
+    const title = document.createElement('div');
+    title.className = 'celebration-title';
+    title.textContent = '🎉 You’re done for today!';
+    const sub = document.createElement('div');
+    sub.className = 'celebration-sub';
+    sub.textContent = 'Nice work. Go enjoy your evening.';
     cel.append(title, sub);
     container.appendChild(cel);
+
+    const undoBtn = document.createElement('button');
+    undoBtn.className = 'btn-skip change-focus-btn';
+    undoBtn.textContent = 'Undo';
+    undoBtn.addEventListener('click', () => {
+      data.dailyDone = data.dailyDone.filter((d) => d !== today);
+      save();
+      renderToday();
+    });
+    container.appendChild(undoBtn);
     return;
   }
 
-  const subtasks = goal.subtasks || [];
+  const subtasks = (goal.subtasks || []).filter((s) => !s.completed);
   if (subtasks.length === 0) {
-    const empty = document.createElement(‘div’);
-    empty.className = ‘empty-state’;
-    empty.textContent = ‘This goal has no steps yet. Add some in the Goals tab.’;
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'This goal has no steps left. Add some in the Goals tab.';
     container.appendChild(empty);
   } else {
-    const list = document.createElement(‘div’);
-    list.className = ‘today-step-list’;
+    const list = document.createElement('div');
+    list.className = 'today-step-list';
     subtasks.forEach((sub) => {
-      const item = document.createElement(‘div’);
-      item.className = ‘today-step’;
-      const bullet = document.createElement(‘span’);
-      bullet.className = ‘today-step-bullet’;
-      bullet.textContent = ‘•’;
-      const text = document.createElement(‘div’);
-      text.className = ‘today-step-text’;
+      const item = document.createElement('div');
+      item.className = 'today-step';
+      const bullet = document.createElement('span');
+      bullet.className = 'today-step-bullet';
+      bullet.textContent = '•';
+      const text = document.createElement('div');
+      text.className = 'today-step-text';
       text.textContent = sub.text;
       item.append(bullet, text);
       list.appendChild(item);
@@ -233,18 +247,10 @@ function renderToday() {
     container.appendChild(list);
   }
 
-  const changeBtn = document.createElement(‘button’);
-  changeBtn.className = ‘btn-skip change-focus-btn’;
-  changeBtn.textContent = ‘Change focus for today’;
-  changeBtn.addEventListener(‘click’, () => {
-    if (changeFocus()) renderToday();
-  });
-  container.appendChild(changeBtn);
-
-  const doneBtn = document.createElement(‘button’);
-  doneBtn.className = ‘btn-done-today’;
-  doneBtn.textContent = "✓ Done for today";
-  doneBtn.addEventListener(‘click’, () => {
+  const doneBtn = document.createElement('button');
+  doneBtn.className = 'btn-done-today';
+  doneBtn.textContent = '✓ Done for today';
+  doneBtn.addEventListener('click', () => {
     if (!data.dailyDone.includes(today)) {
       data.dailyDone.push(today);
       save();
@@ -252,6 +258,14 @@ function renderToday() {
     renderToday();
   });
   container.appendChild(doneBtn);
+
+  const changeBtn = document.createElement('button');
+  changeBtn.className = 'btn-skip change-focus-btn';
+  changeBtn.textContent = 'Change focus for today';
+  changeBtn.addEventListener('click', () => {
+    if (changeFocus()) renderToday();
+  });
+  container.appendChild(changeBtn);
 }
 
 /* ---------------- Goals view ---------------- */
@@ -712,7 +726,16 @@ function renderTodos() {
 
   data.todos.forEach((todo) => {
     const item = document.createElement('div');
-    item.className = 'todo-item';
+    item.className = 'todo-item' + (todo.done ? ' completed' : '');
+
+    const check = document.createElement('button');
+    check.className = 'todo-check';
+    check.textContent = todo.done ? '✓' : '';
+    check.addEventListener('click', () => {
+      todo.done = !todo.done;
+      save();
+      renderTodos();
+    });
 
     const text = document.createElement('div');
     text.className = 'todo-text';
@@ -727,7 +750,7 @@ function renderTodos() {
       renderTodos();
     });
 
-    item.append(text, del);
+    item.append(check, text, del);
     listEl.appendChild(item);
   });
 }
@@ -737,7 +760,7 @@ document.getElementById('todo-form').addEventListener('submit', (e) => {
   const input = document.getElementById('todo-input');
   const text = input.value.trim();
   if (!text) return;
-  data.todos.push({ id: uid(), text });
+  data.todos.push({ id: uid(), text, done: false });
   save();
   input.value = '';
   renderTodos();

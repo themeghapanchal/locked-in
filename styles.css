@@ -536,6 +536,29 @@ input[type="color"] {
   align-items: center;
   gap: 12px;
 }
+.todo-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--text-dim);
+  background: transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 13px;
+  color: white;
+}
+.todo-item.completed .todo-check {
+  background: var(--green);
+  border-color: var(--green);
+}
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--text-dim);
+}
 .todo-text {
   flex: 1;
   font-size: 15px;
@@ -567,39 +590,6 @@ input[type="color"] {
   font-size: 14px;
   color: var(--text-dim);
   line-height: 1.5;
-}
-
-/* Daily limit toggle */
-.limit-toggle {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.limit-label {
-  font-size: 13px;
-  color: var(--text-dim);
-}
-.limit-buttons {
-  display: flex;
-  gap: 8px;
-}
-.limit-btn {
-  background: var(--surface-2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 13px;
-  border-radius: 8px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-.limit-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
 }
 
 /* Check-in */
